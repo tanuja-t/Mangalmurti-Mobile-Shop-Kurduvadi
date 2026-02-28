@@ -1,0 +1,179 @@
+const express = require("express");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const path = require("path");
+const Contact = require("./models/Contact");
+
+dotenv.config();
+
+const app = express();
+
+// Middleware
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Static folder
+app.use(express.static(path.join(__dirname, "images")));
+
+// MongoDB Connection
+mongoose.connect(process.env.MONGO_URI)
+.then(() => console.log("MongoDB Connected Successfully"))
+.catch(err => console.log(err));
+
+// User Model
+const User = require("./models/User");
+
+// Routes
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
+app.get('/login', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
+
+app.get('/signup', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'signup.html'));
+});
+
+app.get('/index', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
+
+app.get('/aboutus', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'aboutus.html'));
+});
+
+app.get('/contact', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'contact.html'));
+});
+
+app.get('/shopnow', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'shopnow.html'));
+});
+
+app.get('/mobile', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'mobile.html'));
+});
+
+app.get('/accessories', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'accessories.html'));
+});
+
+app.get('/cover', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'cover.html'));
+});
+
+app.get('/iphone', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'iphone.html'));
+});
+
+app.get('/sumsumg', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'sumsumg.html'));
+});
+
+app.get('/realme', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'realme.html'));
+});
+
+app.get('/iqoo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'iqoo.html'));
+});
+
+app.get('/narzo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'narzo.html'));
+});
+
+app.get('/redmi', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'redmi.html'));
+});
+
+app.get('/oppo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'oppo.html'));
+});
+
+app.get('/poco', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'poco.html'));
+});
+
+app.get('/vivo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'vivo.html'));
+});
+
+
+
+// ===================== SIGNUP =====================
+app.post("/signup", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return res.send("User already exists");
+        }
+
+        const newUser = new User({
+            email,
+            password
+        });
+
+        await newUser.save();
+
+        res.send("Registration Successful ✅");
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Server error during registration");
+    }
+});
+
+// ===================== LOGIN =====================
+app.post("/login", async (req, res) => {
+    try {
+        const { email, password } = req.body;
+
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.send("User not found ❌");
+        }
+
+        if (user.password !== password) {
+            return res.send("Invalid Password ❌");
+        }
+
+        // IMPORTANT CHANGE
+        res.redirect("/index");
+
+    } catch (err) {
+        console.log(err);
+        res.status(500).send("Server error during login");
+    }
+});
+
+app.post("/contact", async (req, res) => {
+    try {
+        const { name, email, message } = req.body;
+
+        const newMessage = new Contact({
+            name,
+            email,
+            message
+        });
+
+        await newMessage.save();
+
+        res.send("Message Sent Successfully ✅");
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send("Error saving message");
+    }
+});
+
+// Server Start
+const PORT = process.env.PORT || 7000;
+
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
