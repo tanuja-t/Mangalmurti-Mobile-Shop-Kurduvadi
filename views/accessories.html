@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Mobile Accessories | Mangalmurti Mobile Shop</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', Arial, sans-serif;
+}
+
+body{
+  background:linear-gradient(135deg,#020617,#0f172a);
+  display:flex;
+}
+
+/* LEFT SIDE CONTENT */
+.main{
+  width:75%;
+}
+
+/* HEADER */
+.header{
+  text-align:center;
+  padding:40px 20px;
+}
+
+.header h1{
+  font-size:40px;
+  font-weight:900;
+  background:linear-gradient(#64ffda,#00e5ff);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  color:transparent;
+}
+
+.header p{
+  color:#cbd5e1;
+  margin-top:8px;
+}
+
+/* FILTER BAR */
+#filter-bar{
+  max-width:1200px;
+  margin:10px auto;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:10px;
+}
+
+#filter-bar button{
+  padding:8px 18px;
+  border:none;
+  border-radius:25px;
+  background:#f9fbfa;
+  color:#020617;
+  font-weight:600;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+#filter-bar button:hover{
+  background:#00e5ff;
+}
+
+/* GRID */
+.grid{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+/* CARD */
+.card{
+  background:white;
+  border-radius:16px;
+  padding:15px;
+  text-align:center;
+  box-shadow:0 15px 30px rgba(0,0,0,0.25);
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  transition:0.3s ease;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 20px 40px rgba(0,0,0,0.35);
+}
+
+.card img{
+  width:100%;
+  height:180px;
+  object-fit:contain;
+  background:#f8fafc;
+  border-radius:12px;
+  padding:10px;
+  margin-bottom:10px;
+}
+
+.price{
+  margin-top:6px;
+  font-weight:700;
+  color:#16a34a;
+}
+
+.cart-btn{
+  margin-top:10px;
+  padding:8px 14px;
+  border:none;
+  border-radius:8px;
+  background:#0f172a;
+  color:white;
+  cursor:pointer;
+}
+
+/* RIGHT SIDE CART */
+.cart{
+  width:25%;
+  background:#111827;
+  color:white;
+  padding:20px;
+  height:100vh;
+  overflow-y:auto;
+  position:sticky;
+  top:0;
+}
+
+.cart h2{
+  text-align:center;
+  margin-bottom:15px;
+}
+
+.cart-item{
+  background:#1f2937;
+  padding:10px;
+  margin-bottom:10px;
+  border-radius:8px;
+}
+
+.cart-item button{
+  margin:3px;
+  padding:3px 8px;
+  border:none;
+  border-radius:4px;
+  cursor:pointer;
+}
+
+.total{
+  margin-top:15px;
+  font-size:18px;
+  font-weight:bold;
+  text-align:center;
+}
+
+.place-order{
+  margin-top:15px;
+  width:100%;
+  padding:12px;
+  background:#25D366;
+  color:white;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="main">
+
+<div class="header">
+   <h1>Mobile Accessories</h1>
+    <p>Fast Chargers • Cables • Earbuds • Speakers</p>
+</div>
+
+<div id="filter-bar">
+    <button onclick="filterCompany('All')">All</button>
+    <button onclick="filterCompany('Vivo')">Vivo</button>
+    <button onclick="filterCompany('Realme')">Realme</button>
+    <button onclick="filterCompany('Oppo')">Oppo</button>
+    <button onclick="filterCompany('Samsung')">Samsung</button>
+    <button onclick="filterCompany('Mi')">Mi</button>
+    <button onclick="filterCompany('OnePlus')">OnePlus</button>
+    <button onclick="filterCompany('Nothing')">Nothing</button>
+    <button onclick="filterCompany('Boat')">Boat</button>
+    <button onclick="filterCompany('JBL')">JBL</button>
+</div>
+
+<div class="grid" id="product-grid"></div>
+
+</div>
+
+<div class="cart">
+  <h2>Your Order 🛒</h2>
+  <div id="cart-items"></div>
+  <div class="total">Total: ₹<span id="total">0</span></div>
+  <button class="place-order" onclick="placeOrder()">
+    Place Order on WhatsApp
+  </button>
+</div>
+
+<script>
+
+const covers = [
+{company:"Vivo",name:"Vivo 44W Charger",price:300,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170452/b1_g0tnpd.jpg"},
+{company:"Vivo",name:"V25 Pro 80W Charger",price:400,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170453/b2_cmhkw7.jpg"},
+{company:"Vivo",name:"V30 Pro 120W Charger",price:700,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170456/b3_v9iwjs.jpg"},
+{company:"Realme",name:"Realme 33W SuperDart",price:700,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170461/b4_u3vcd2.jpg"},
+{company:"Realme",name:"Realme 45W SuperVooc",price:600,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170470/b5_c8pgb3.jpg"},
+{company:"Oppo",name:"Oppo 100W Charger",price:400,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170473/b6_dzgtrp.jpg"},
+{company:"Nothing",name:"Nothing 33W CMF",price:890,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170479/b7_tyjv7a.jpg"},
+{company:"Nothing",name:"Nothing 65W CMF",price:550,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170481/b8_otqleu.jpg"},
+{company:"Mi",name:"Mi 27W Charger",price:180,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170485/b9_eh1mlo.jpg"},
+{company:"Mi",name:"Mi 67W + Cable",price:300,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170487/b10_zjgjtv.jpg"},
+{company:"Mi",name:"Mi 120W Combo",price:500,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170488/b11_w5t0eb.jpg"},
+{company:"OnePlus",name:"OnePlus 65W Charger",price:700,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170493/b12_lq7lpo.jpg"},
+{company:"OnePlus",name:"OnePlus 80W Combo",price:400,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170496/b13_vngsjy.jpg"},
+{company:"Samsung",name:"Samsung 25W Adapter",price:650,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170499/b15_zmddts.jpg"},
+{company:"Samsung",name:"Samsung 45W Adapter",price:1200,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170501/b16_onfyi6.jpg"},
+{company:"Samsung",name:"Samsung 45W Adapter + Cable",price:1500,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170504/b17_jf7pkz.jpg"},
+{company:"Boat",name:"Boat Rockerz Band",price:600,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170520/b24_pvh6cd.jpg"},
+{company:"Boat",name:"Boat Airdopes 151X",price:330,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170523/b25_d5vopf.jpg"},
+{company:"JBL",name:"JBL Speaker",price:1200,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170525/b26_t1twmc.jpg"}
+];
+
+let cart=[];
+
+function renderCovers(list){
+  const grid=document.getElementById("product-grid");
+  grid.innerHTML="";
+  list.forEach(c=>{
+    grid.innerHTML+=`
+    <div class="card">
+      <img src="${c.img}">
+      <h3>${c.name}</h3>
+      <div class="price">₹${c.price}</div>
+      <button class="cart-btn" onclick="addToCart('${c.name}')">
+      Add to Cart
+      </button>
+    </div>`;
+  });
+}
+
+function filterCompany(company){
+  if(company==="All"){
+    renderCovers(covers);
+  } else{
+    renderCovers(covers.filter(c=>c.company===company));
+  }
+}
+
+function addToCart(name){
+  const product=covers.find(c=>c.name===name);
+  const exist=cart.find(item=>item.name===name);
+
+  if(exist){ exist.qty++; }
+  else{ cart.push({...product,qty:1}); }
+
+  renderCart();
+}
+
+function renderCart(){
+  const cartDiv=document.getElementById("cart-items");
+  cartDiv.innerHTML="";
+  let total=0;
+
+  cart.forEach(item=>{
+    total+=item.price*item.qty;
+    cartDiv.innerHTML+=`
+    <div class="cart-item">
+      <p>${item.name}</p>
+      <p>₹${item.price} x ${item.qty}</p>
+      <button onclick="changeQty('${item.name}',1)">+</button>
+      <button onclick="changeQty('${item.name}',-1)">-</button>
+    </div>`;
+  });
+
+  document.getElementById("total").innerText=total;
+}
+
+function changeQty(name,val){
+  const item=cart.find(i=>i.name===name);
+  item.qty+=val;
+  if(item.qty<=0){
+    cart=cart.filter(i=>i.name!==name);
+  }
+  renderCart();
+}
+
+function placeOrder(){
+  if(cart.length===0){
+    alert("Your cart is empty!");
+    return;
+  }
+
+  let message="🛒 *New Order - Mangalmurti Mobile Shop*%0A%0A";
+  let total=0;
+
+  cart.forEach(item=>{
+    message+=item.name+" (x"+item.qty+") - ₹"+(item.price*item.qty)+"%0A";
+    total+=item.price*item.qty;
+  });
+
+  message+="%0A*Total: ₹"+total+"*";
+
+  let phone="9175685103";
+  window.open("https://wa.me/"+phone+"?text="+message,"_blank");
+}
+
+renderCovers(covers);
+
+</script>
+
+</body>
+</html>

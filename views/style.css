@@ -1,0 +1,128 @@
+*
+{
+    padding: 0;
+    margin: 0;
+     box-sizing: border-box;
+}
+body
+{
+    background-image: url("22.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: right bottom,left top;
+    animation: blinkingBackground 2s infinite;
+
+}
+.menu-bar
+{
+    background:rgba(255, 99, 71, 0);
+    text-align: center;
+    
+}
+.menu-bar ul
+{
+    display: inline-flex;
+    list-style: none;
+    color:#FFFAF0;
+}
+.menu-bar ul li
+{
+    width: 250px;
+    margin: 10px;
+    padding: 5px;
+   
+}
+.menu-bar ul li a
+{
+    text-decoration:none;
+    color:#076d20 ;
+}
+.active, .menu-bar ul li:hover
+{
+    background: #FFFAF0;
+    border-radius: 3px;
+    
+}
+.menu-bar .fa
+{
+    margin-right: 8px;
+}
+.sub-menu-1
+{
+    display: none;
+}
+.menu-bar ul li:hover .sub-menu-1
+{
+    display: block;
+    position: absolute;
+    background: #FFFAF0;
+    margin-top: 15px;
+    margin-left: -15px;
+}
+.menu-bar ul li:hover .sub-menu-1 ul
+{
+    display: block;
+    margin: 10px;
+}
+.menu-bar ul li:hover .sub-menu-1 ul li
+{
+    width: 150px;
+    padding: 10px;
+    border-bottom: 1px dotted #fff;
+    background: transparent;
+    border-radius: 0;
+    text-align: left;
+}
+.logo img
+{
+    float: left;
+    width: 10px;
+}
+.title 
+{
+    position: absolute;
+    top: 47%;
+    left: 60%;
+    
+}
+.title h1
+{
+    color:MediumVioletRed ;
+    font-size: 70px;
+}
+
+.button
+{
+    position:absolute;
+    top : 75%;
+    left: 60%;
+}
+.btn
+{
+    border:  solid #076d20;
+    padding: 7px 25px;
+    color: solid #076d20(7, 138, 27);
+    transition: 0.5 ease;
+    font-size: 20px;
+}
+.slides
+{
+overflow:hidden;
+animation-name:fade;
+animation-duration:1s;
+display:none;
+}
+@keyframes fade{
+from{
+  opacity:0.4;
+}
+to{
+  opacity:1;
+}
+}
+img{
+width:100%;
+height: 350px;
+}
+
+

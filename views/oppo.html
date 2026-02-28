@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mangalmurti Mobile Shop</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+/* ====== GENERAL ====== */
+body{transition:background 0.3s,color 0.3s;}
+body { background:#0f172a; color:white; } /* DARK BLUE BACKGROUND */
+.dark-mode body{background:#0f172a;color:white;}
+.product-card{display:flex;flex-direction:column;height:100%;transition:all 0.3s ease;border-radius:0.5rem;overflow:hidden;position:relative;}
+.product-card:hover{transform:translateY(-5px);box-shadow:0 15px 25px rgba(0,0,0,0.2);}
+.product-image{height:240px;display:flex;align-items:center;justify-content:center;background:#fff;position:relative;overflow:hidden;}
+.product-image img{max-height:100%;max-width:100%;object-fit:contain;transition: transform 0.3s ease;}
+.product-image:hover img{transform:scale(1.1);}
+.fresh-badge,.offer-badge,.top-badge,.discount-badge{position:absolute;font-size:0.65rem;padding:2px 6px;border-radius:4px;font-weight:bold;text-transform:uppercase;color:white;}
+.fresh-badge{top:8px;left:8px;background:#16a34a;}
+.offer-badge{top:8px;right:8px;background:#dc2626;}
+.top-badge{bottom:8px;left:8px;background:#f97316;}
+.discount-badge{top:8px;right:8px;background:#3b82f6;}
+.price-tag{font-size:1.2rem;font-weight:700;color:#ea580c;}
+.add-btn{background:linear-gradient(to right,#0f172a,#334155);transition:all 0.3s ease;padding:6px 12px;border-radius:0.375rem;}
+.add-btn:hover{background:linear-gradient(to right,#ea580c,#f97316);}
+.cart-sidebar{transition: transform 0.3s ease-in-out; background:#0f172a; color:white;}
+.cart-hidden{transform:translateX(100%);}
+.cart-footer{position:sticky;bottom:0;background:#0f172a;color:white;padding-top:10px;}
+/* SEARCH & FILTER INPUT BLACK STYLE */
+#filter-bar input,
+#filter-bar select{
+  background-color:#000;   /* Black Background */
+  color:#fff;              /* White Text */
+  border:1px solid #444;
+}
+#filter-bar{
+  margin:20px auto;
+  display:flex;
+  gap:15px;
+  flex-wrap:wrap;
+  justify-content:center;   /* Horizontal Center */
+  align-items:center;       /* Vertical Center */
+  max-width:600px;          /* Center width limit */
+}
+
+
+#filter-bar input::placeholder{
+  color:#ccc;              /* Light placeholder text */
+}
+
+#filter-bar select option{
+  background-color:#000;
+  color:#fff;
+}
+
+/* ====== HERO SLIDER ====== */
+#hero-slider{position:relative;max-width:7xl;margin:auto;overflow:hidden;border-radius:10px;height:450px;}
+#hero-slider img{width:100%;height:300px;object-fit:cover;transition:opacity 1s;}
+#hero-slider .slide{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;}
+#hero-slider .active{opacity:1;z-index:10;}
+</style>
+</head>
+<body class="bg-[#0f172a] font-sans text-white">
+
+<!-- NAVBAR -->
+<nav class="bg-slate-900 text-white p-4 sticky top-0 z-50 shadow-md flex justify-between items-center">
+  <h1 class="text-2xl font-bold">Mangalmurti <span class="text-orange-500">Mobile</span></h1>
+  <div class="flex items-center gap-4">
+    <button onclick="toggleCart()" class="relative">
+      <i class="fas fa-shopping-cart text-2xl"></i>
+      <span id="cart-badge" class="absolute -top-2 -right-2 bg-orange-600 text-xs w-5 h-5 rounded-full flex items-center justify-center hidden">0</span>
+    </button>
+    <button onclick="toggleMode()" class="text-xl"><i class="fas fa-moon"></i></button>
+  </div>
+</nav>
+
+<!-- HERO SLIDER -->
+<div id="hero-slider" class="mt-6">
+  <img src="https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261273/oppo1_uiu3me.jpg" class="slide active">
+  <img src="https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261276/oppo2_ijhceo.webp" class="slide">
+  <img src="https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261277/oppo3_u87u1x.webp" class="slide">
+</div>
+
+<!-- HEADER -->
+<header class="bg-slate-800 text-white text-center py-10 mt-6">
+  <h2 class="text-4xl font-bold mb-2">Mobile Price List</h2>
+  <p class="text-gray-300">Latest Available Models</p>
+</header>
+
+<!-- SEARCH & FILTER -->
+<div id="filter-bar" class="max-w-7xl mx-auto p-6">
+  <input type="text" id="searchInput" placeholder="Search by name..." onkeyup="applyFilter()">
+  <select id="ramFilter" onchange="applyFilter()">
+    <option value="">All RAM</option>
+    <option value="4GB">4GB</option>
+    <option value="6GB">6GB</option>
+    <option value="8GB">8GB</option>
+    <option value="12GB">12GB</option>
+  </select>
+  <select id="sortPrice" onchange="applyFilter()">
+    <option value="">Sort Price</option>
+    <option value="low">Low → High</option>
+    <option value="high">High → Low</option>
+  </select>
+</div>
+
+<!-- PRODUCTS GRID -->
+<main class="max-w-7xl mx-auto p-6">
+  <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"></div>
+</main>
+
+<!-- CART SIDEBAR -->
+<div id="cart-sidebar" class="cart-sidebar cart-hidden fixed top-0 right-0 w-full sm:w-96 h-full shadow-xl p-5 z-50 flex flex-col">
+  <div class="flex justify-between items-center border-b pb-3">
+    <h3 class="text-xl font-bold">Your Order</h3>
+    <button onclick="toggleCart()" class="text-2xl">&times;</button>
+  </div>
+  <div id="cart-items" class="flex-grow overflow-y-auto py-4"></div>
+  <div class="cart-footer border-t pt-4">
+    <p class="font-bold mb-2">Total: <span id="cart-total" class="text-orange-600">₹0</span></p>
+    <a id="whatsappOrder" href="#" target="_blank" class="w-full mt-2 block text-center bg-green-600 text-white py-2 rounded hover:bg-green-700">Order via WhatsApp</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="bg-slate-900 text-gray-400 text-center py-6">© 2026 Mangalmurti Mobile Shop</footer>
+
+<script>
+let darkMode=false;
+function toggleMode(){ darkMode=!darkMode; document.body.classList.toggle('dark-mode'); }
+
+// HERO SLIDER
+const slides=document.querySelectorAll('#hero-slider .slide');
+let currentSlide=0;
+setInterval(()=>{ slides[currentSlide].classList.remove('active'); currentSlide=(currentSlide+1)%slides.length; slides[currentSlide].classList.add('active'); },3000);
+
+// PRODUCTS
+const products=[{id:1,name:"OPPO A6x",price:11050,spec:"4GB/64GB • 5G",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261179/o1_f7yhim.jpg",fresh:true},
+{id:2,name:"OPPO A6x",price:12050,spec:"4GB/128GB • 5G",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261185/o2_cicuoy.jpg"},
+{id:3,name:"OPPO A5",price:13300,spec:"6GB/128GB • 5G",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261183/o3_wqb0mh.jpg",discount:10},
+{id:4,name:"OPPO A5 Pro",price:14950,spec:"8GB/128GB • 5G",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261189/o4_udvgvn.jpg"},
+{id:5,name:"OPPO A5 Pro",price:16650,spec:"8GB/256GB • 5G",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261208/o5_ggrobv.jpg",top:true},
+{id:6,name:"OPPO F29 Pro",price:18800,spec:"8GB/256GB • 5G",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261209/o6_ibz4ac.jpg"},
+{id:7,name:"OPPO F31",price:19700,spec:"8GB/128GB",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261211/o7_ha1ads.jpg"},
+{id:8,name:"OPPO F31",price:21950,spec:"8GB/256GB",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261212/o8_bof4zl.jpg"},
+{id:9,name:"OPPO F31 Pro",price:21050,spec:"8GB/128GB",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261215/o9_ucbehu.jpg"},
+{id:10,name:"OPPO F31 Pro",price:23550,spec:"8GB/256GB",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261217/o11_ohahiq.jpg",discount:5},
+{id:11,name:"OPPO F31 Pro",price:24200,spec:"12GB/256GB",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261220/o12_uef7q6.jpg",top:true},
+{id:12,name:"OPPO F31 Pro+",price:26000,spec:"8GB/256GB",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261222/o13_q0euws.jpg"},
+{id:13,name:"OPPO F31 Pro+",price:27500,spec:"12GB/256GB",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261224/o14_gqfiz1.jpg",discount:8},
+{id:14,name:"OPPO K13",price:17700,spec:"8GB/128GB • 5G",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261225/o15_ktghbb.jpg"},
+{id:15,name:"OPPO K13",price:19800,spec:"8GB/256GB • 5G",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261228/o16_kj1wqx.jpg"},
+{id:16,name:"OPPO K13x",price:11650,spec:"4GB/128GB • 5G • Fresh",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261229/o17_wzpdme.jpg",fresh:true},
+{id:17,name:"OPPO K13x",price:12690,spec:"6GB/128GB • 5G • Fresh",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261231/o18_eiza1m.jpg"},
+{id:18,name:"OPPO K13x",price:14300,spec:"8GB/128GB • 5G • Fresh",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261233/o19_yl6y2b.jpg"},
+{id:19,name:"Reno 12 Pro",price:28500,spec:"12GB/512GB",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261272/o20_ja0zth.jpg"},
+{id:20,name:"Reno 14 Pro",price:40900,spec:"12GB/256GB",img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772261216/o10_tmfhyx.jpg"}];
+
+const grid=document.getElementById("product-grid");
+function renderProducts(list){
+  grid.innerHTML="";
+  list.forEach(p=>{
+    grid.innerHTML+=`
+    <div class="product-card bg-white shadow hover:shadow-lg overflow-hidden">
+      <div class="product-image">
+        <img src="${p.img}" alt="${p.name}">
+        ${p.fresh?'<span class="fresh-badge">NEW</span>':''}
+        ${p.top?'<span class="top-badge">🔥 Top Seller</span>':''}
+        ${p.discount?'<span class="discount-badge">'+p.discount+'% OFF</span>':''}
+      </div>
+      <div class="p-4 flex flex-col justify-between flex-grow">
+        <div>
+          <h3 class="font-bold text-lg">${p.name}</h3>
+          <p class="text-sm text-gray-500">${p.spec}</p>
+        </div>
+        <div class="flex justify-between items-center mt-3">
+          <span class="price-tag">₹${p.price}</span>
+          <button onclick="addToCart('${p.name}',${p.price})" class="add-btn text-white">Add</button>
+        </div>
+      </div>
+    </div>`;
+  });
+}
+renderProducts(products);
+
+function toggleCart(){ document.getElementById("cart-sidebar").classList.toggle("cart-hidden"); }
+let cart=[];
+function addToCart(name,price){
+  const item=cart.find(i=>i.name===name);
+  item?item.qty++:cart.push({name,price,qty:1});
+  updateCart(); toggleCart();
+}
+function updateCart(){
+  const box=document.getElementById("cart-items");
+  const badge=document.getElementById("cart-badge");
+  let total=0; box.innerHTML="";
+  cart.forEach(i=>{ total+=i.price*i.qty; box.innerHTML+=`<div class="flex justify-between mb-2"><span>${i.name} x${i.qty}</span><span>₹${i.price*i.qty}</span></div>`; });
+  document.getElementById("cart-total").innerText="₹"+total;
+  badge.innerText=cart.reduce((s,i)=>s+i.qty,0);
+  badge.classList.toggle("hidden",cart.length===0);
+  document.getElementById("whatsappOrder").href=`https://wa.me/9175685103?text=Order:%20${cart.map(i=>i.name+' x'+i.qty).join(', ')}%20Total:%20₹${total}`;
+}
+// SEARCH & FILTER
+function applyFilter(){
+  const search=document.getElementById("searchInput").value.toLowerCase();
+  const ram=document.getElementById("ramFilter").value;
+  const sort=document.getElementById("sortPrice").value;
+  let filtered=products.filter(p=>p.name.toLowerCase().includes(search));
+  if(ram) filtered=filtered.filter(p=>p.spec.includes(ram));
+  if(sort==='low') filtered.sort((a,b)=>a.price-b.price);
+  if(sort==='high') filtered.sort((a,b)=>b.price-a.price);
+  renderProducts(filtered);
+}
+</script>
+</body>
+</html>
