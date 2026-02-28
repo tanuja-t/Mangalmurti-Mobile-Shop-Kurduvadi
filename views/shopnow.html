@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Shop</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Segoe UI', Arial, sans-serif;
+}
+
+body{
+  background:linear-gradient(135deg,#020617,#0f172a,#020617);
+  color:#e5e7eb;
+}
+
+/* ================= SLIDER ================= */
+.slider{
+  position:relative;
+  width:100%;
+  height:380px;
+  background-size:cover;
+  background-position:center;
+  animation:slide 15s infinite;
+  filter:brightness(1.1);
+}
+
+/* LIGHT OVERLAY (FIX) */
+.slider::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:rgba(2,6,23,0.25); /* light overlay */
+}
+
+/* SLIDER TEXT */
+.slider-text{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  text-align:center;
+  z-index:2;
+}
+
+.slider-text h2{
+  font-size:44px;
+  font-weight:800;
+  color:#64ffda;
+}
+
+.slider-text p{
+  margin-top:10px;
+  font-size:18px;
+  color:#e5e7eb;
+}
+
+/* SLIDER IMAGES */
+@keyframes slide{
+  0%{background-image:url('https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772122800/15_rcnkxs.jpg');}
+  33%{background-image:url('https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772122817/16_wj7t91.jpg');}
+  66%{background-image:url('https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772122821/17_ue3g7g.jpg');}
+  100%{background-image:url('https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772122824/18_bxv806.avif');}
+}
+
+/* ================= CONTAINER ================= */
+.container{
+  width:90%;
+  max-width:1200px;
+  margin:60px auto;
+}
+
+/* ================= CATEGORIES ================= */
+.categories{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:30px;
+}
+
+/* CARD */
+.category-card{
+  background:#020617;
+  border-radius:18px;
+  overflow:hidden;
+  text-align:center;
+  border:1px solid #1e293b;
+  transition:0.3s;
+}
+
+.category-card:hover{
+  transform:translateY(-8px);
+  border-color:#38bdf8;
+}
+
+/* IMAGE FIX (IMPORTANT) */
+.category-card img{
+  width:100%;
+  height:190px;
+  object-fit:contain;      /* CLEAR IMAGE */
+  padding:15px;
+  background:#f8fafc;      /* light bg for clarity */
+}
+
+/* TITLE */
+.category-card h3{
+  padding:18px;
+  font-size:20px;
+  color:#f8fafc;
+}
+
+/* LINK */
+.category-card a{
+  text-decoration:none;
+  color:inherit;
+  display:block;
+}
+
+/* ================= FOOTER ================= */
+footer{
+  text-align:center;
+  padding:25px;
+  margin-top:60px;
+  font-size:14px;
+  color:#94a3b8;
+  border-top:1px solid #1e293b;
+}
+
+/* ================= MOBILE ================= */
+@media(max-width:600px){
+  .slider{
+    height:260px;
+  }
+  .slider-text h2{
+    font-size:30px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- SLIDER -->
+<div class="slider">
+  <div class="slider-text">
+    <h2>Best Mobile Deals</h2>
+    <p>Latest Phones • Genuine Accessories • Best Price</p>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<main class="container">
+  <section class="categories">
+
+    <div class="category-card">
+      <a href="/mobile">
+        <img src="https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772122831/21_nrssmx.jpg">
+        <h3>Mobiles</h3>
+      </a>
+    </div>
+
+    <div class="category-card">
+      <a href="/accessories">
+        <img src="https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772122392/13_syjfgy.jpg">
+        <h3>Mobile Accessories</h3>
+      </a>
+    </div>
+
+    <div class="category-card">
+      <a href="/cover">
+        <img src="https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772122396/14_rlaoeb.jpg">
+        <h3>Mobile Covers</h3>
+      </a>
+    </div>
+
+  </section>
+</main>
+
+<footer>
+  © 2026 Mobile Shop | All Rights Reserved
+</footer>
+
+</body>
+</html>
