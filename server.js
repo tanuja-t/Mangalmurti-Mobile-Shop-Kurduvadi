@@ -2,7 +2,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const path = require("path");
-const Contact = require("./models/Contact");
 
 dotenv.config();
 
@@ -22,6 +21,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // User Model
 const User = require("./models/User");
+const Contact = require("./models/Contact");
 
 // Routes
 app.get('/', (req, res) => {
@@ -176,4 +176,5 @@ const PORT = process.env.PORT || 7000;
 
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
+
 });
