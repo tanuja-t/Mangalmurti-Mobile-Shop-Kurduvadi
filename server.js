@@ -103,11 +103,13 @@ app.get('/vivo', (req, res) => {
 // ===================== SIGNUP =====================
 app.post("/signup", async (req, res) => {
     try {
+
         const { email, password } = req.body;
 
         const existingUser = await User.findOne({ email });
+
         if (existingUser) {
-            return res.send("User already exists");
+            return res.send("User already exists ❌");
         }
 
         const newUser = new User({
@@ -117,13 +119,15 @@ app.post("/signup", async (req, res) => {
 
         await newUser.save();
 
-        res.send("Registration Successful ✅");
+        // signup nantar index page open
+        res.redirect("/index");
 
     } catch (err) {
         console.log(err);
-        res.status(500).send("Server error during registration");
+        res.status(500).send("Server error during signup");
     }
 });
+
 
 // ===================== LOGIN =====================
 app.post("/login", async (req, res) => {
