@@ -3,179 +3,111 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const path = require("path");
 
-
 dotenv.config();
-
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// MongoDB Connection
+// Static files
+app.use(express.static(path.join(__dirname, "views")));
+
+// MongoDB
 mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("MongoDB Connected Successfully"))
+.then(() => console.log("MongoDB Connected"))
 .catch(err => console.log(err));
 
-// User Model
+// Models
 const User = require("./Models/User");
 const Contact = require("./Models/Contact");
 
-// Routes
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'login.html'));
-});
+// ================= ROUTES =================
 
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'login.html'));
-});
+const sendPage = (page) => (req, res) => {
+    res.sendFile(path.join(__dirname, "views", page));
+};
 
-app.get('/signup', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'signup.html'));
-});
+app.get("/", sendPage("index.html"));
+app.get("/login", sendPage("login.html"));
+app.get("/signup", sendPage("signup.html"));
+app.get("/aboutus", sendPage("aboutus.html"));
+app.get("/contact", sendPage("contact.html"));
+app.get("/shopnow", sendPage("shopnow.html"));
+app.get("/mobile", sendPage("mobile.html"));
+app.get("/accessories", sendPage("accessories.html"));
+app.get("/cover", sendPage("cover.html"));
+app.get("/iphone", sendPage("iphone.html"));
+app.get("/samsung", sendPage("samsung.html"));
+app.get("/realme", sendPage("realme.html"));
+app.get("/iqoo", sendPage("iqoo.html"));
+app.get("/narzo", sendPage("narzo.html"));
+app.get("/redmi", sendPage("redmi.html"));
+app.get("/oppo", sendPage("oppo.html"));
+app.get("/poco", sendPage("poco.html"));
+app.get("/vivo", sendPage("vivo.html"));
 
-app.get('/index', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'index.html'));
-});
+// ================= SIGNUP =================
 
-app.get('/aboutus', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'aboutus.html'));
-});
-
-app.get('/contact', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'contact.html'));
-});
-
-app.get('/shopnow', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'shopnow.html'));
-});
-
-app.get('/mobile', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'mobile.html'));
-});
-
-app.get('/accessories', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'accessories.html'));
-});
-
-app.get('/cover', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'cover.html'));
-});
-
-app.get('/iphone', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'iphone.html'));
-});
-
-app.get('/sumsumg', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'sumsumg.html'));
-});
-
-app.get('/realme', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'realme.html'));
-});
-
-app.get('/iqoo', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'iqoo.html'));
-});
-
-app.get('/narzo', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'narzo.html'));
-});
-
-app.get('/redmi', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'redmi.html'));
-});
-
-app.get('/oppo', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'oppo.html'));
-});
-
-app.get('/poco', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'poco.html'));
-});
-
-app.get('/vivo', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'vivo.html'));
-});
-
-
-
-// ===================== SIGNUP =====================
 app.post("/signup", async (req, res) => {
     try {
-
         const { email, password } = req.body;
 
         const existingUser = await User.findOne({ email });
-
         if (existingUser) {
             return res.send("User already exists ❌");
         }
 
-        const newUser = new User({
-            email,
-            password
-        });
-
+        const newUser = new User({ email, password });
         await newUser.save();
 
-        // signup nantar index page open
-        res.redirect("/index");
-
+        res.redirect("/"); // FIX
     } catch (err) {
         console.log(err);
-        res.status(500).send("Server error during signup");
+        res.status(500).send("Signup Error");
     }
 });
 
+// ================= LOGIN =================
 
-// ===================== LOGIN =====================
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
 
         const user = await User.findOne({ email });
 
-        if (!user) {
-            return res.send("User not found ❌");
-        }
+        if (!user) return res.send("User not found ❌");
 
-        if (user.password !== password) {
-            return res.send("Invalid Password ❌");
-        }
+        if (user.password !== password)
+            return res.send("Wrong password ❌");
 
-        // IMPORTANT CHANGE
-        res.redirect("/index");
-
+        res.redirect("/"); // FIX
     } catch (err) {
         console.log(err);
-        res.status(500).send("Server error during login");
+        res.status(500).send("Login Error");
     }
 });
+
+// ================= CONTACT =================
 
 app.post("/contact", async (req, res) => {
     try {
         const { name, email, message } = req.body;
 
-        const newMessage = new Contact({
-            name,
-            email,
-            message
-        });
-
+        const newMessage = new Contact({ name, email, message });
         await newMessage.save();
 
         res.send("Message Sent Successfully ✅");
-
     } catch (error) {
         console.log(error);
         res.status(500).send("Error saving message");
     }
 });
 
-// Server Start
+// ================= SERVER =================
+
 const PORT = process.env.PORT || 7000;
 
 app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`Server running on ${PORT}`);
 });
