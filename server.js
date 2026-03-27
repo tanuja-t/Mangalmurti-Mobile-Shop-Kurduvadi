@@ -21,7 +21,7 @@ mongoose.connect(process.env.MONGO_URI)
 
 // User Model
 const User = require("./Models/User");
-const User = require("./Models/Contact");
+const Contact = require("./Models/Contact");
 
 // Routes
 app.get('/', (req, res) => {
