@@ -2,142 +2,154 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const path = require("path");
-const session = require("express-session");
 
 dotenv.config();
+
 const app = express();
 
-// ================= MIDDLEWARE =================
+// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(session({
-    secret: "secret-key",
-    resave: false,
-    saveUninitialized: false,   // 🔥 IMPORTANT
-    cookie: {
-        secure: false
-    }
-}));
 
-// Static files
-app.use(express.static(path.join(__dirname, "views")));
+// Static folder
+app.use(express.static(path.join(__dirname, "images")));
 
-// ================= MONGODB =================
+// MongoDB Connection
 mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("MongoDB Connected"))
+.then(() => console.log("MongoDB Connected Successfully"))
 .catch(err => console.log(err));
 
-// ================= MODELS =================
+// User Model
 const User = require("./Models/User");
-const Contact = require("./Models/Contact");
+const User = require("./Models/Contact");
 
-// ================= PROTECT MIDDLEWARE =================
-const protect = (req, res, next) => {
-    if (!req.session.user) {
-        return res.redirect("/login");
-    }
-    next();
-};
+// Routes
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'login.html'));
+});
 
-// ================= ROUTES =================
+app.get('/signup', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'signup.html'));
+});
 
-const sendPage = (page) => (req, res) => {
-    res.sendFile(path.join(__dirname, "views", page));
-};
+app.get('/index', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+});
 
-// PUBLIC ROUTES
-app.get("/login", sendPage("login.html"));
-app.get("/signup", sendPage("signup.html"));
+app.get('/aboutus', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'aboutus.html'));
+});
 
-// PROTECTED ROUTES
-app.get("/", protect, sendPage("login.html"));
-app.get("/index", protect, sendPage("index.html"));
-app.get("/aboutus", protect, sendPage("aboutus.html"));
-app.get("/contact", protect, sendPage("contact.html"));
-app.get("/shopnow", protect, sendPage("shopnow.html"));
-app.get("/mobile", protect, sendPage("mobile.html"));
-app.get("/accessories", protect, sendPage("accessories.html"));
-app.get("/cover", protect, sendPage("cover.html"));
-app.get("/iphone", protect, sendPage("iphone.html"));
-app.get("/samsung", protect, sendPage("samsung.html"));
-app.get("/realme", protect, sendPage("realme.html"));
-app.get("/iqoo", protect, sendPage("iqoo.html"));
-app.get("/narzo", protect, sendPage("narzo.html"));
-app.get("/redmi", protect, sendPage("redmi.html"));
-app.get("/oppo", protect, sendPage("oppo.html"));
-app.get("/poco", protect, sendPage("poco.html"));
-app.get("/vivo", protect, sendPage("vivo.html"));
+app.get('/contact', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'contact.html'));
+});
 
-// ================= SIGNUP =================
+app.get('/shopnow', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'shopnow.html'));
+});
+
+app.get('/mobile', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'mobile.html'));
+});
+
+app.get('/accessories', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'accessories.html'));
+});
+
+app.get('/cover', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'cover.html'));
+});
+
+app.get('/iphone', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'iphone.html'));
+});
+
+app.get('/sumsumg', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'sumsumg.html'));
+});
+
+app.get('/realme', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'realme.html'));
+});
+
+app.get('/iqoo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'iqoo.html'));
+});
+
+app.get('/narzo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'narzo.html'));
+});
+
+app.get('/redmi', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'redmi.html'));
+});
+
+app.get('/oppo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'oppo.html'));
+});
+
+app.get('/poco', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'poco.html'));
+});
+
+app.get('/vivo', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'vivo.html'));
+});
+
+
+
+// ===================== SIGNUP =====================
 app.post("/signup", async (req, res) => {
     try {
         const { email, password } = req.body;
 
         const existingUser = await User.findOne({ email });
         if (existingUser) {
-            return res.send("User already exists ❌");
+            return res.send("User already exists");
         }
 
-        const newUser = new User({ email, password });
+        const newUser = new User({
+            email,
+            password
+        });
+
         await newUser.save();
 
-        res.redirect("/login"); // ✅ signup nantar login page
+        res.send("Registration Successful ✅");
+
     } catch (err) {
         console.log(err);
-        res.status(500).send("Signup Error");
+        res.status(500).send("Server error during registration");
     }
 });
 
-// ================= LOGIN =================
+// ===================== LOGIN =====================
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
 
         const user = await User.findOne({ email });
 
-        if (!user) return res.send("User not found ❌");
+        if (!user) {
+            return res.send("User not found ❌");
+        }
 
-        if (user.password !== password)
-            return res.send("Wrong password ❌");
+        if (user.password !== password) {
+            return res.send("Invalid Password ❌");
+        }
 
-        // ✅ session set
-        req.session.user = user;
-
-        // 🔥 FORCE SAVE (fix)
-        req.session.save(() => {
-            res.redirect("/");
-        });
+        // IMPORTANT CHANGE
+        res.redirect("/index");
 
     } catch (err) {
         console.log(err);
-        res.status(500).send("Login Error");
+        res.status(500).send("Server error during login");
     }
 });
 
-// ================= LOGOUT =================
-app.get("/logout", (req, res) => {
-    req.session.destroy();
-    res.redirect("/login");
-});
-
-// ================= CONTACT =================
-app.post("/contact", async (req, res) => {
-    try {
-        const { name, email, message } = req.body;
-
-        const newMessage = new Contact({ name, email, message });
-        await newMessage.save();
-
-        res.send("Message Sent Successfully ✅");
-    } catch (error) {
-        console.log(error);
-        res.status(500).send("Error saving message");
-    }
-});
-
-// ================= SERVER =================
+// Server Start
 const PORT = process.env.PORT || 7000;
 
 app.listen(PORT, () => {
-    console.log(`Server running on ${PORT}`);
+    console.log(`Server running on http://localhost:${PORT}`);
 });
