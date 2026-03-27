@@ -115,7 +115,8 @@ app.post("/signup", async (req, res) => {
 
         await newUser.save();
 
-        res.send("Registration Successful ✅");
+        // IMPORTANT CHANGE
+        res.redirect("/index");
 
     } catch (err) {
         console.log(err);
