@@ -2,25 +2,40 @@ const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const path = require("path");
+const session = require("express-session");
 
 dotenv.config();
 const app = express();
 
-// Middleware
+// ================= MIDDLEWARE =================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(session({
+    secret: "secret-key",
+    resave: false,
+    saveUninitialized: true
+}));
 
 // Static files
 app.use(express.static(path.join(__dirname, "views")));
 
-// MongoDB
+// ================= MONGODB =================
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log("MongoDB Connected"))
 .catch(err => console.log(err));
 
-// Models
+// ================= MODELS =================
 const User = require("./Models/User");
 const Contact = require("./Models/Contact");
+
+// ================= PROTECT MIDDLEWARE =================
+const protect = (req, res, next) => {
+    if (!req.session.user) {
+        return res.redirect("/login");
+    }
+    next();
+};
 
 // ================= ROUTES =================
 
@@ -28,27 +43,29 @@ const sendPage = (page) => (req, res) => {
     res.sendFile(path.join(__dirname, "views", page));
 };
 
-app.get("/", sendPage("index.html"));
+// PUBLIC ROUTES
 app.get("/login", sendPage("login.html"));
 app.get("/signup", sendPage("signup.html"));
-app.get("/aboutus", sendPage("aboutus.html"));
-app.get("/contact", sendPage("contact.html"));
-app.get("/shopnow", sendPage("shopnow.html"));
-app.get("/mobile", sendPage("mobile.html"));
-app.get("/accessories", sendPage("accessories.html"));
-app.get("/cover", sendPage("cover.html"));
-app.get("/iphone", sendPage("iphone.html"));
-app.get("/samsung", sendPage("samsung.html"));
-app.get("/realme", sendPage("realme.html"));
-app.get("/iqoo", sendPage("iqoo.html"));
-app.get("/narzo", sendPage("narzo.html"));
-app.get("/redmi", sendPage("redmi.html"));
-app.get("/oppo", sendPage("oppo.html"));
-app.get("/poco", sendPage("poco.html"));
-app.get("/vivo", sendPage("vivo.html"));
+
+// PROTECTED ROUTES
+app.get("/", protect, sendPage("index.html"));
+app.get("/aboutus", protect, sendPage("aboutus.html"));
+app.get("/contact", protect, sendPage("contact.html"));
+app.get("/shopnow", protect, sendPage("shopnow.html"));
+app.get("/mobile", protect, sendPage("mobile.html"));
+app.get("/accessories", protect, sendPage("accessories.html"));
+app.get("/cover", protect, sendPage("cover.html"));
+app.get("/iphone", protect, sendPage("iphone.html"));
+app.get("/samsung", protect, sendPage("samsung.html"));
+app.get("/realme", protect, sendPage("realme.html"));
+app.get("/iqoo", protect, sendPage("iqoo.html"));
+app.get("/narzo", protect, sendPage("narzo.html"));
+app.get("/redmi", protect, sendPage("redmi.html"));
+app.get("/oppo", protect, sendPage("oppo.html"));
+app.get("/poco", protect, sendPage("poco.html"));
+app.get("/vivo", protect, sendPage("vivo.html"));
 
 // ================= SIGNUP =================
-
 app.post("/signup", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -61,7 +78,7 @@ app.post("/signup", async (req, res) => {
         const newUser = new User({ email, password });
         await newUser.save();
 
-        res.redirect("/"); // FIX
+        res.redirect("/login"); // ✅ signup nantar login page
     } catch (err) {
         console.log(err);
         res.status(500).send("Signup Error");
@@ -69,7 +86,6 @@ app.post("/signup", async (req, res) => {
 });
 
 // ================= LOGIN =================
-
 app.post("/login", async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -81,15 +97,23 @@ app.post("/login", async (req, res) => {
         if (user.password !== password)
             return res.send("Wrong password ❌");
 
-        res.redirect("/"); // FIX
+        // ✅ SESSION SAVE
+        req.session.user = user;
+
+        res.redirect("/"); // login nantar home
     } catch (err) {
         console.log(err);
         res.status(500).send("Login Error");
     }
 });
 
-// ================= CONTACT =================
+// ================= LOGOUT =================
+app.get("/logout", (req, res) => {
+    req.session.destroy();
+    res.redirect("/login");
+});
 
+// ================= CONTACT =================
 app.post("/contact", async (req, res) => {
     try {
         const { name, email, message } = req.body;
@@ -105,7 +129,6 @@ app.post("/contact", async (req, res) => {
 });
 
 // ================= SERVER =================
-
 const PORT = process.env.PORT || 7000;
 
 app.listen(PORT, () => {
