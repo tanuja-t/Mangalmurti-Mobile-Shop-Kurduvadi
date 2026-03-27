@@ -5,6 +5,13 @@
 <meta name="google-site-verification" content="EfZ-3WYljhHSE3kXPMt2UE6g8Jb34vZryPAmgZTjb94" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- LOGIN PROTECTION -->
+<script>
+if(localStorage.getItem("loggedIn") !== "true"){
+    window.location.href = "login.html";
+}
+</script>
+
 <!-- SEO -->
 <title>Mangalmurti Mobile Shop Kurduvadi</title>
 <meta name="description" content="Mangalmurti Mobile Shop in Kurduvadi offers latest smartphones, accessories and mobile repair services at best price.">
@@ -201,7 +208,8 @@ footer{
 <script>
 function logout(){
     if(confirm("Do you want to log out?")){
-        window.location.href = "/";
+        localStorage.removeItem("loggedIn"); // IMPORTANT
+        window.location.href = "login.html";
     }
 }
 </script>
