@@ -50,7 +50,8 @@ app.get("/login", sendPage("login.html"));
 app.get("/signup", sendPage("signup.html"));
 
 // PROTECTED ROUTES
-app.get("/", protect, sendPage("index.html"));
+app.get("/", protect, sendPage("login.html"));
+app.get("/index", protect, sendPage("index.html"));
 app.get("/aboutus", protect, sendPage("aboutus.html"));
 app.get("/contact", protect, sendPage("contact.html"));
 app.get("/shopnow", protect, sendPage("shopnow.html"));
