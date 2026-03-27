@@ -10,11 +10,13 @@ const app = express();
 // ================= MIDDLEWARE =================
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
 app.use(session({
     secret: "secret-key",
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: false,   // 🔥 IMPORTANT
+    cookie: {
+        secure: false
+    }
 }));
 
 // Static files
@@ -97,10 +99,14 @@ app.post("/login", async (req, res) => {
         if (user.password !== password)
             return res.send("Wrong password ❌");
 
-        // ✅ SESSION SAVE
+        // ✅ session set
         req.session.user = user;
 
-        res.redirect("/"); // login nantar home
+        // 🔥 FORCE SAVE (fix)
+        req.session.save(() => {
+            res.redirect("/");
+        });
+
     } catch (err) {
         console.log(err);
         res.status(500).send("Login Error");
