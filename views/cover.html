@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Mobile Covers | Mangalmurti Mobile Shop</title>
+<title>Mobile covers | Mangalmurti Mobile Shop</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -14,13 +14,8 @@
 }
 
 body{
-  background:linear-gradient(135deg,#020617,#0f172a);
-  display:flex;
-}
-
-/* LEFT SIDE CONTENT */
-.main{
-  width:75%;
+  background:#020c1b;
+  color:white;
 }
 
 /* HEADER */
@@ -30,38 +25,36 @@ body{
 }
 
 .header h1{
-  font-size:40px;
+  font-size:42px;
   font-weight:900;
-  background:linear-gradient(#64ffda,#00e5ff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-  color:transparent;
+  color:#00e5ff;
 }
 
 .header p{
   color:#cbd5e1;
-  margin-top:8px;
 }
 
-/* FILTER BAR */
+/* FILTER */
 #filter-bar{
-  max-width:1200px;
-  margin:10px auto;
   display:flex;
-  flex-wrap:wrap;
   justify-content:center;
+  flex-wrap:wrap;
   gap:10px;
+  margin-bottom:20px;
 }
 
 #filter-bar button{
   padding:8px 18px;
   border:none;
-  border-radius:25px;
-  background:#f9fbfa;
-  color:#020617;
+  border-radius:20px;
+  background:#e5e7eb;
+  color:#000;
   font-weight:600;
   cursor:pointer;
+}
+
+#filter-bar button:hover{
+  background:#00e5ff;
 }
 
 /* GRID */
@@ -70,70 +63,108 @@ body{
   margin:auto;
   padding:20px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
 }
 
 /* CARD */
 .card{
   background:white;
-  border-radius:16px;
-  padding:15px;
+  border-radius:18px;
+  padding:18px;
   text-align:center;
-  box-shadow:0 15px 30px rgba(0,0,0,0.25);
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  transition:0.3s ease;
+  transition:0.3s;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 .card:hover{
   transform:translateY(-6px);
-  box-shadow:0 25px 45px rgba(0,0,0,0.35);
 }
 
-/* IMAGE FIX */
+/* IMAGE */
 .card img{
   width:100%;
-  height:200px;          /* SAME HEIGHT FOR ALL */
-  object-fit:contain;    /* NO STRETCH */
-  background:#f1f5f9;    /* CLEAN BACKGROUND */
-  padding:15px;
+  height:180px;
+  object-fit:contain;
+  background:#f1f5f9;
   border-radius:12px;
-  margin-bottom:12px;
+  padding:12px;
+  margin-bottom:10px;
+}
+
+/* TEXT */
+.card h3{
+  color:black;
+  font-size:16px;
+  margin:10px 0;
 }
 
 .price{
-  margin-top:6px;
-  font-weight:700;
   color:#16a34a;
+  font-weight:bold;
+  margin-bottom:10px;
 }
 
+/* BUTTON */
 .cart-btn{
-  margin-top:10px;
-  padding:8px 14px;
+  width:100%;
+  padding:10px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
   background:#0f172a;
   color:white;
+  font-weight:600;
   cursor:pointer;
 }
 
-/* RIGHT SIDE CART */
-.cart{
-  width:25%;
-  background:#111827;
-  color:white;
-  padding:20px;
-  height:100vh;
-  overflow-y:auto;
-  position:sticky;
-  top:0;
+.cart-btn:hover{
+  background:#00e5ff;
+  color:black;
 }
 
-.cart h2{
-  text-align:center;
-  margin-bottom:15px;
+/* CART ICON */
+#cart-icon{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:#00e5ff;
+  color:black;
+  padding:10px 15px;
+  border-radius:30px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+#cart-count{
+  background:red;
+  color:white;
+  padding:2px 6px;
+  border-radius:50%;
+  margin-left:5px;
+}
+
+/* CART MODAL */
+#cart-modal{
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:320px;
+  height:100%;
+  background:#111827;
+  padding:20px;
+  transition:0.4s;
+}
+
+#cart-modal.active{
+  right:0;
+}
+
+.close-btn{
+  position:absolute;
+  top:10px;
+  right:15px;
+  cursor:pointer;
+  font-size:20px;
 }
 
 .cart-item{
@@ -143,39 +174,49 @@ body{
   border-radius:8px;
 }
 
-.cart-item button{
-  margin:3px;
-  padding:3px 8px;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-}
-
-.total{
-  margin-top:15px;
-  font-size:18px;
-  font-weight:bold;
-  text-align:center;
-}
-
-.place-order{
-  margin-top:15px;
-  width:100%;
-  padding:12px;
-  background:#25D366;
+.remove-btn{
+  background:red;
   color:white;
   border:none;
-  border-radius:8px;
-  font-size:16px;
-  font-weight:bold;
+  padding:5px;
+  border-radius:5px;
   cursor:pointer;
+}
+
+/* TOAST POPUP */
+#toast{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#00e5ff;
+  color:black;
+  padding:12px 20px;
+  border-radius:10px;
+  font-weight:600;
+  opacity:0;
+  transform:translateY(50px);
+  transition:0.4s;
+  z-index:999;
+}
+
+#toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+  .header h1{
+    font-size:28px;
+  }
 }
 </style>
 </head>
 
 <body>
-
-<div class="main">
 
 <div class="header">
   <h1>Mobile Covers</h1>
@@ -189,28 +230,30 @@ body{
   <button onclick="filterBrand('Realme')">Realme</button>
   <button onclick="filterBrand('Oppo')">Oppo</button>
   <button onclick="filterBrand('iPhone')">iPhone</button>
-  <button onclick="filterBrand('Mi')">Mi</button>
-  <button onclick="filterBrand('OnePlus')">OnePlus</button>
   <button onclick="filterBrand('Nothing')">Nothing</button>
 </div>
 
 <div class="grid" id="product-grid"></div>
 
+<!-- CART ICON -->
+<div id="cart-icon" onclick="toggleCart()">
+🛒 <span id="cart-count">0</span>
 </div>
 
-<div class="cart">
-  <h2>Your Order 🛒</h2>
+<!-- CART -->
+<div id="cart-modal">
+  <span class="close-btn" onclick="toggleCart()">✖</span>
+  <h2>Your Cart</h2>
   <div id="cart-items"></div>
-  <div class="total">Total: ₹<span id="total">0</span></div>
-
-  <button class="place-order" onclick="placeOrder()">
-    Place Order on WhatsApp
-  </button>
+  <div>Total: ₹<span id="total">0</span></div>
 </div>
+
+<!-- 🔥 TOAST -->
+<div id="toast"></div>
 
 <script>
 
-// FULL DATA SAME
+/* 🔥 FULL PRODUCT LIST (UNCHANGED) */
 const covers = [
 {brand:"Vivo", name:"Vivo Y20 Shockproof Cover", price:265, img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772178689/c1_ipimzz.jpg"},
 {brand:"Vivo", name:"Vivo Y51 silicon soft Cover", price:279, img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772178689/c2_pzgoo9.jpg"},
@@ -267,10 +310,10 @@ const covers = [
 {brand:"Nothing", name:"Nothing Phone 2 Transparent Matte Cover", price:330, img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772178766/c53_gruyfb.jpg"}
 ];
 
-let cart = [];
+let cart=[];
 
 function renderCovers(list){
-  const grid = document.getElementById("product-grid");
+  const grid=document.getElementById("product-grid");
   grid.innerHTML="";
   list.forEach(c=>{
     grid.innerHTML+=`
@@ -278,9 +321,7 @@ function renderCovers(list){
       <img src="${c.img}">
       <h3>${c.name}</h3>
       <div class="price">₹${c.price}</div>
-      <button class="cart-btn" onclick="addToCart('${c.name}')">
-      Add to Cart
-      </button>
+      <button class="cart-btn" onclick="addToCart('${c.name}')">Add to Cart</button>
     </div>`;
   });
 }
@@ -291,69 +332,53 @@ function filterBrand(brand){
 }
 
 function addToCart(name){
-  const product = covers.find(c=>c.name===name);
-  const exist = cart.find(item=>item.name===name);
+  const product=covers.find(c=>c.name===name);
+  const exist=cart.find(i=>i.name===name);
 
-  if(exist){
-    exist.qty++;
-  }else{
-    cart.push({...product, qty:1});
-  }
-  renderCart();
+  if(exist){exist.qty++;}
+  else{cart.push({...product,qty:1});}
+
+  updateCart();
+  showToast(name + " added to cart ✅");
 }
 
-function renderCart(){
-  const cartDiv=document.getElementById("cart-items");
-  cartDiv.innerHTML="";
-  let total=0;
+function showToast(msg){
+  const toast=document.getElementById("toast");
+  toast.innerText=msg;
+  toast.classList.add("show");
+
+  setTimeout(()=>{
+    toast.classList.remove("show");
+  },2000);
+}
+
+function updateCart(){
+  let total=0,count=0;
+  const div=document.getElementById("cart-items");
+  div.innerHTML="";
 
   cart.forEach(item=>{
     total+=item.price*item.qty;
+    count+=item.qty;
 
-    cartDiv.innerHTML+=`
+    div.innerHTML+=`
     <div class="cart-item">
-      <p>${item.name}</p>
-      <p>₹${item.price} x ${item.qty}</p>
-      <button onclick="changeQty('${item.name}',1)">+</button>
-      <button onclick="changeQty('${item.name}',-1)">-</button>
-      <button onclick="removeItem('${item.name}')">Remove</button>
+      <p>${item.name} (x${item.qty})</p>
+      <button class="remove-btn" onclick="removeItem('${item.name}')">Remove</button>
     </div>`;
   });
 
   document.getElementById("total").innerText=total;
-}
-
-function changeQty(name,val){
-  const item=cart.find(i=>i.name===name);
-  item.qty+=val;
-  if(item.qty<=0) removeItem(name);
-  renderCart();
+  document.getElementById("cart-count").innerText=count;
 }
 
 function removeItem(name){
   cart=cart.filter(i=>i.name!==name);
-  renderCart();
+  updateCart();
 }
 
-function placeOrder(){
-  if(cart.length===0){
-    alert("Your cart is empty!");
-    return;
-  }
-
-  let message="🛒 *New Order - Mangalmurti Mobile Shop*%0A%0A";
-  let total=0;
-
-  cart.forEach(item=>{
-    message+=item.name+" (x"+item.qty+") - ₹"+(item.price*item.qty)+"%0A";
-    total+=item.price*item.qty;
-  });
-
-  message+="%0A*Total: ₹"+total+"*";
-
-  let phone="9175685103";
-
-  window.open("https://wa.me/"+phone+"?text="+message,"_blank");
+function toggleCart(){
+  document.getElementById("cart-modal").classList.toggle("active");
 }
 
 renderCovers(covers);
