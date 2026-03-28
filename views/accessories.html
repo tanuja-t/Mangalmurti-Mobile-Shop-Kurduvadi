@@ -14,13 +14,8 @@
 }
 
 body{
-  background:linear-gradient(135deg,#020617,#0f172a);
-  display:flex;
-}
-
-/* LEFT SIDE CONTENT */
-.main{
-  width:75%;
+  background:#020c1b;
+  color:white;
 }
 
 /* HEADER */
@@ -30,39 +25,32 @@ body{
 }
 
 .header h1{
-  font-size:40px;
+  font-size:42px;
   font-weight:900;
-  background:linear-gradient(#64ffda,#00e5ff);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-  color:transparent;
+  color:#00e5ff;
 }
 
 .header p{
   color:#cbd5e1;
-  margin-top:8px;
 }
 
-/* FILTER BAR */
+/* FILTER */
 #filter-bar{
-  max-width:1200px;
-  margin:10px auto;
   display:flex;
-  flex-wrap:wrap;
   justify-content:center;
+  flex-wrap:wrap;
   gap:10px;
+  margin-bottom:20px;
 }
 
 #filter-bar button{
   padding:8px 18px;
   border:none;
-  border-radius:25px;
-  background:#f9fbfa;
-  color:#020617;
+  border-radius:20px;
+  background:#e5e7eb;
+  color:#000;
   font-weight:600;
   cursor:pointer;
-  transition:0.3s;
 }
 
 #filter-bar button:hover{
@@ -75,69 +63,108 @@ body{
   margin:auto;
   padding:20px;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
 }
 
 /* CARD */
 .card{
   background:white;
-  border-radius:16px;
-  padding:15px;
+  border-radius:18px;
+  padding:18px;
   text-align:center;
-  box-shadow:0 15px 30px rgba(0,0,0,0.25);
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  transition:0.3s ease;
+  transition:0.3s;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
 }
 
 .card:hover{
-  transform:translateY(-5px);
-  box-shadow:0 20px 40px rgba(0,0,0,0.35);
+  transform:translateY(-6px);
 }
 
+/* IMAGE */
 .card img{
   width:100%;
   height:180px;
   object-fit:contain;
-  background:#f8fafc;
+  background:#f1f5f9;
   border-radius:12px;
-  padding:10px;
+  padding:12px;
   margin-bottom:10px;
 }
 
-.price{
-  margin-top:6px;
-  font-weight:700;
-  color:#16a34a;
+/* TEXT */
+.card h3{
+  color:black;
+  font-size:16px;
+  margin:10px 0;
 }
 
+.price{
+  color:#16a34a;
+  font-weight:bold;
+  margin-bottom:10px;
+}
+
+/* BUTTON */
 .cart-btn{
-  margin-top:10px;
-  padding:8px 14px;
+  width:100%;
+  padding:10px;
   border:none;
-  border-radius:8px;
+  border-radius:10px;
   background:#0f172a;
   color:white;
+  font-weight:600;
   cursor:pointer;
 }
 
-/* RIGHT SIDE CART */
-.cart{
-  width:25%;
-  background:#111827;
-  color:white;
-  padding:20px;
-  height:100vh;
-  overflow-y:auto;
-  position:sticky;
-  top:0;
+.cart-btn:hover{
+  background:#00e5ff;
+  color:black;
 }
 
-.cart h2{
-  text-align:center;
-  margin-bottom:15px;
+/* CART ICON */
+#cart-icon{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:#00e5ff;
+  color:black;
+  padding:10px 15px;
+  border-radius:30px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+#cart-count{
+  background:red;
+  color:white;
+  padding:2px 6px;
+  border-radius:50%;
+  margin-left:5px;
+}
+
+/* CART MODAL */
+#cart-modal{
+  position:fixed;
+  top:0;
+  right:-100%;
+  width:320px;
+  height:100%;
+  background:#111827;
+  padding:20px;
+  transition:0.4s;
+}
+
+#cart-modal.active{
+  right:0;
+}
+
+.close-btn{
+  position:absolute;
+  top:10px;
+  right:15px;
+  cursor:pointer;
+  font-size:20px;
 }
 
 .cart-item{
@@ -147,180 +174,176 @@ body{
   border-radius:8px;
 }
 
-.cart-item button{
-  margin:3px;
-  padding:3px 8px;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-}
-
-.total{
-  margin-top:15px;
-  font-size:18px;
-  font-weight:bold;
-  text-align:center;
-}
-
-.place-order{
-  margin-top:15px;
-  width:100%;
-  padding:12px;
-  background:#25D366;
+.remove-btn{
+  background:red;
   color:white;
   border:none;
-  border-radius:8px;
-  font-size:16px;
-  font-weight:bold;
+  padding:5px;
+  border-radius:5px;
   cursor:pointer;
+}
+
+/* TOAST POPUP */
+#toast{
+  position:fixed;
+  bottom:20px;
+  right:20px;
+  background:#00e5ff;
+  color:black;
+  padding:12px 20px;
+  border-radius:10px;
+  font-weight:600;
+  opacity:0;
+  transform:translateY(50px);
+  transition:0.4s;
+  z-index:999;
+}
+
+#toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+  .header h1{
+    font-size:28px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="main">
-
 <div class="header">
    <h1>Mobile Accessories</h1>
-    <p>Fast Chargers • Cables • Earbuds • Speakers</p>
+   <p>Fast Chargers • Cables • Earbuds • Speakers</p>
 </div>
 
 <div id="filter-bar">
-    <button onclick="filterCompany('All')">All</button>
-    <button onclick="filterCompany('Vivo')">Vivo</button>
-    <button onclick="filterCompany('Realme')">Realme</button>
-    <button onclick="filterCompany('Oppo')">Oppo</button>
-    <button onclick="filterCompany('Samsung')">Samsung</button>
-    <button onclick="filterCompany('Mi')">Mi</button>
-    <button onclick="filterCompany('OnePlus')">OnePlus</button>
-    <button onclick="filterCompany('Nothing')">Nothing</button>
-    <button onclick="filterCompany('Boat')">Boat</button>
-    <button onclick="filterCompany('JBL')">JBL</button>
+<button onclick="filterCategory('All')">All</button>
+<button onclick="filterCategory('Charger')">Charger</button>
+<button onclick="filterCategory('Earbuds')">Earbuds</button>
+<button onclick="filterCategory('Speaker')">Speakers</button>
 </div>
 
 <div class="grid" id="product-grid"></div>
 
+<!-- CART -->
+<div id="cart-icon" onclick="toggleCart()">
+🛒 <span id="cart-count">0</span>
 </div>
 
-<div class="cart">
-  <h2>Your Order 🛒</h2>
+<div id="cart-modal">
+  <span class="close-btn" onclick="toggleCart()">✖</span>
+  <h2>Your Cart</h2>
   <div id="cart-items"></div>
-  <div class="total">Total: ₹<span id="total">0</span></div>
-  <button class="place-order" onclick="placeOrder()">
-    Place Order on WhatsApp
-  </button>
+  <h3>Total: ₹<span id="total">0</span></h3>
 </div>
+
+<!-- TOAST -->
+<div id="toast"></div>
 
 <script>
 
-const covers = [
-{company:"Vivo",name:"Vivo 44W Charger",price:300,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170452/b1_g0tnpd.jpg"},
-{company:"Vivo",name:"V25 Pro 80W Charger",price:400,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170453/b2_cmhkw7.jpg"},
-{company:"Vivo",name:"V30 Pro 120W Charger",price:700,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170456/b3_v9iwjs.jpg"},
-{company:"Realme",name:"Realme 33W SuperDart",price:700,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170461/b4_u3vcd2.jpg"},
-{company:"Realme",name:"Realme 45W SuperVooc",price:600,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170470/b5_c8pgb3.jpg"},
-{company:"Oppo",name:"Oppo 100W Charger",price:400,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170473/b6_dzgtrp.jpg"},
-{company:"Nothing",name:"Nothing 33W CMF",price:890,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170479/b7_tyjv7a.jpg"},
-{company:"Nothing",name:"Nothing 65W CMF",price:550,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170481/b8_otqleu.jpg"},
-{company:"Mi",name:"Mi 27W Charger",price:180,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170485/b9_eh1mlo.jpg"},
-{company:"Mi",name:"Mi 67W + Cable",price:300,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170487/b10_zjgjtv.jpg"},
-{company:"Mi",name:"Mi 120W Combo",price:500,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170488/b11_w5t0eb.jpg"},
-{company:"OnePlus",name:"OnePlus 65W Charger",price:700,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170493/b12_lq7lpo.jpg"},
-{company:"OnePlus",name:"OnePlus 80W Combo",price:400,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170496/b13_vngsjy.jpg"},
-{company:"Samsung",name:"Samsung 25W Adapter",price:650,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170499/b15_zmddts.jpg"},
-{company:"Samsung",name:"Samsung 45W Adapter",price:1200,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170501/b16_onfyi6.jpg"},
-{company:"Samsung",name:"Samsung 45W Adapter + Cable",price:1500,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170504/b17_jf7pkz.jpg"},
-{company:"Boat",name:"Boat Rockerz Band",price:600,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170520/b24_pvh6cd.jpg"},
-{company:"Boat",name:"Boat Airdopes 151X",price:330,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170523/b25_d5vopf.jpg"},
-{company:"JBL",name:"JBL Speaker",price:1200,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170525/b26_t1twmc.jpg"}
+const products = [
+{category:"Charger",name:"Vivo 44W Charger",price:300,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170452/b1_g0tnpd.jpg"},
+{category:"Charger",name:"V25 Pro 80W Charger",price:400,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170453/b2_cmhkw7.jpg"},
+{category:"Charger",name:"V30 Pro 120W Charger",price:700,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170456/b3_v9iwjs.jpg"},
+{category:"Charger",name:"Realme 33W SuperDart",price:700,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170461/b4_u3vcd2.jpg"},
+{category:"Charger",name:"Realme 45W SuperVooc",price:600,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170470/b5_c8pgb3.jpg"},
+{category:"Charger",name:"Oppo 100W Charger",price:400,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170473/b6_dzgtrp.jpg"},
+{category:"Charger",name:"Nothing 33W CMF",price:890,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170479/b7_tyjv7a.jpg"},
+{category:"Charger",name:"Nothing 65W CMF",price:550,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170481/b8_otqleu.jpg"},
+{category:"Charger",name:"Mi 27W Charger",price:180,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170485/b9_eh1mlo.jpg"},
+{category:"Charger",name:"Mi 67W + Cable",price:300,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170487/b10_zjgjtv.jpg"},
+{category:"Charger",name:"Mi 120W Combo",price:500,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170488/b11_w5t0eb.jpg"},
+{category:"Charger",name:"OnePlus 65W Charger",price:700,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170493/b12_lq7lpo.jpg"},
+{category:"Charger",name:"OnePlus 80W Combo",price:400,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170496/b13_vngsjy.jpg"},
+{category:"Charger",name:"Samsung 25W Adapter",price:650,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170499/b15_zmddts.jpg"},
+{category:"Charger",name:"Samsung 45W Adapter",price:1200,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170501/b16_onfyi6.jpg"},
+{category:"Charger",name:"Samsung 45W Adapter + Cable",price:1500,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170504/b17_jf7pkz.jpg"},
+{category:"Earbuds",name:"Boat Rockerz Band",price:600,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170520/b24_pvh6cd.jpg"},
+{category:"Earbuds",name:"Boat Airdopes 151X",price:330,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170523/b25_d5vopf.jpg"},
+{category:"Speaker",name:"JBL Speaker",price:1200,img:"https://res.cloudinary.com/dkhsgrkqn/image/upload/v1772170525/b26_t1twmc.jpg"}
 ];
 
 let cart=[];
 
-function renderCovers(list){
+function renderProducts(list){
   const grid=document.getElementById("product-grid");
   grid.innerHTML="";
-  list.forEach(c=>{
+  list.forEach(p=>{
     grid.innerHTML+=`
     <div class="card">
-      <img src="${c.img}">
-      <h3>${c.name}</h3>
-      <div class="price">₹${c.price}</div>
-      <button class="cart-btn" onclick="addToCart('${c.name}')">
-      Add to Cart
-      </button>
+      <img src="${p.img}">
+      <h3>${p.name}</h3>
+      <div class="price">₹${p.price}</div>
+      <button class="cart-btn" onclick="addToCart('${p.name}')">Add to Cart</button>
     </div>`;
   });
 }
 
-function filterCompany(company){
-  if(company==="All"){
-    renderCovers(covers);
-  } else{
-    renderCovers(covers.filter(c=>c.company===company));
-  }
+function filterCategory(cat){
+  if(cat==="All") renderProducts(products);
+  else renderProducts(products.filter(p=>p.category===cat));
 }
 
 function addToCart(name){
-  const product=covers.find(c=>c.name===name);
-  const exist=cart.find(item=>item.name===name);
+  const product=products.find(p=>p.name===name);
+  const exist=cart.find(i=>i.name===name);
 
-  if(exist){ exist.qty++; }
-  else{ cart.push({...product,qty:1}); }
+  if(exist) exist.qty++;
+  else cart.push({...product,qty:1});
 
-  renderCart();
+  updateCart();
+  showToast(name + " added to cart ✅");
 }
 
-function renderCart(){
-  const cartDiv=document.getElementById("cart-items");
-  cartDiv.innerHTML="";
-  let total=0;
+function updateCart(){
+  let total=0,count=0;
+  const div=document.getElementById("cart-items");
+  div.innerHTML="";
 
   cart.forEach(item=>{
     total+=item.price*item.qty;
-    cartDiv.innerHTML+=`
+    count+=item.qty;
+
+    div.innerHTML+=`
     <div class="cart-item">
-      <p>${item.name}</p>
-      <p>₹${item.price} x ${item.qty}</p>
-      <button onclick="changeQty('${item.name}',1)">+</button>
-      <button onclick="changeQty('${item.name}',-1)">-</button>
+      <p>${item.name} (x${item.qty})</p>
+      <button class="remove-btn" onclick="removeItem('${item.name}')">Remove</button>
     </div>`;
   });
 
   document.getElementById("total").innerText=total;
+  document.getElementById("cart-count").innerText=count;
 }
 
-function changeQty(name,val){
-  const item=cart.find(i=>i.name===name);
-  item.qty+=val;
-  if(item.qty<=0){
-    cart=cart.filter(i=>i.name!==name);
-  }
-  renderCart();
+function removeItem(name){
+  cart=cart.filter(i=>i.name!==name);
+  updateCart();
 }
 
-function placeOrder(){
-  if(cart.length===0){
-    alert("Your cart is empty!");
-    return;
-  }
-
-  let message="🛒 *New Order - Mangalmurti Mobile Shop*%0A%0A";
-  let total=0;
-
-  cart.forEach(item=>{
-    message+=item.name+" (x"+item.qty+") - ₹"+(item.price*item.qty)+"%0A";
-    total+=item.price*item.qty;
-  });
-
-  message+="%0A*Total: ₹"+total+"*";
-
-  let phone="9175685103";
-  window.open("https://wa.me/"+phone+"?text="+message,"_blank");
+function toggleCart(){
+  document.getElementById("cart-modal").classList.toggle("active");
 }
 
-renderCovers(covers);
+/* TOAST FUNCTION */
+function showToast(msg){
+  const toast=document.getElementById("toast");
+  toast.innerText=msg;
+  toast.classList.add("show");
+
+  setTimeout(()=>{
+    toast.classList.remove("show");
+  },2000);
+}
+
+renderProducts(products);
 
 </script>
 
