@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Mangalmurti Mobile Shop</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins', sans-serif;
+}
+
+body{
+    background:#020c1b;
+    color:white;
+}
+
+/* BACKGROUND */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+
+/* NAVBAR (GLASS EFFECT) */
+nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:15px 8%;
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.05);
+    border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.logo:hover{
+    transform: scale(1.05);
+    transition:0.3s;
+}
+
+/* HERO */
+.hero{
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    flex-direction:column;
+    text-align:center;
+    padding:20px;
+}
+
+.hero h1{
+    font-size:60px;
+    font-weight:700;
+
+    background: linear-gradient(270deg,#64ffda,#00bfff,#64ffda);
+    background-size: 200% 200%;
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    /* IMPORTANT fallback */
+    background-clip: text;
+    color: #64ffda;
+
+    animation: gradientMove 5s ease infinite, fadeIn 1.5s ease;
+}
+
+@keyframes gradientMove{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+.hero p{
+    margin-top:15px;
+    font-size:18px;
+    opacity:0.8;
+}
+
+/* BUTTON */
+.btn{
+    margin-top:30px;
+    padding:12px 30px;
+    border:none;
+    border-radius:30px;
+    background: linear-gradient(90deg,#64ffda,#00bfff);
+    color:#000;
+    font-weight:600;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+.btn:hover{
+    transform: translateY(-3px) scale(1.05);
+    box-shadow:0 0 20px #64ffda;
+}
+
+/* LOADER */
+.loader{
+    margin-top:30px;
+    display:flex;
+    gap:6px;
+}
+
+.loader span{
+    width:10px;
+    height:10px;
+    background:#64ffda;
+    border-radius:50%;
+    animation:bounce 0.6s infinite alternate;
+}
+
+.loader span:nth-child(2){animation-delay:0.2s;}
+.loader span:nth-child(3){animation-delay:0.4s;}
+
+@keyframes bounce{
+    from{transform:translateY(0);}
+    to{transform:translateY(-10px);}
+}
+
+/* MOBILE */
+@media(max-width:768px){
+    .hero h1{
+        font-size:36px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<canvas id="bg"></canvas>
+
+<section class="hero">
+    <h1>Welcome to Mobile World</h1>
+    <p>Premium Smartphones • Best Prices • Trusted Store</p>
+
+    <button class="btn">Explore Now</button>
+
+    <div class="loader">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</section>
+
+<script>
+
+/* CANVAS */
+const canvas = document.getElementById("bg");
+const ctx = canvas.getContext("2d");
+
+function resizeCanvas(){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+let particles = [];
+
+function initParticles(){
+    for(let i=0;i<80;i++){
+        particles.push({
+            x:Math.random()*canvas.width,
+            y:Math.random()*canvas.height,
+            r:Math.random()*2,
+            dx:Math.random()-0.5,
+            dy:Math.random()-0.5
+        });
+    }
+}
+initParticles();
+
+function animate(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+
+    particles.forEach(p=>{
+        ctx.beginPath();
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle="#64ffda";
+        ctx.fill();
+
+        p.x+=p.dx;
+        p.y+=p.dy;
+
+        if(p.x<0||p.x>canvas.width) p.dx*=-1;
+        if(p.y<0||p.y>canvas.height) p.dy*=-1;
+    });
+
+    requestAnimationFrame(animate);
+}
+animate();
+
+/* BUTTON CLICK */
+document.querySelector(".btn").onclick = () => {
+    window.location.href = "/login";
+};
+
+/* AUTO REDIRECT */
+setTimeout(() => {
+    if(localStorage.getItem("loggedIn") === "true"){
+        window.location.href = "/home";
+    } else {
+        window.location.href = "/login";
+    }
+}, 4000);
+
+</script>
+
+</body>
+</html>
